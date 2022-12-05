@@ -1,0 +1,22 @@
+#!/bin/sh
+CFILES="main.c\ 
+	compiler.c\ 
+	lexer.c\ 
+	parser.c\ 
+	interpreter.c\ 
+	global.c"
+compile() {
+  ls build &>/dev/null || mkdir build
+  gcc -g $CFILES -o build/bfc
+}
+install() {
+  INSTALL_DIR="/usr/local/bin"
+  [ -z $0 ] && INSTALL_DIR=$0
+  ls build/bfc || install build/bfc $INSTALL_DIR
+}
+case $1 in
+  "install" | "i" )
+     install $2 ;;
+  "compile" | "c" | *)
+     compile ;;  
+esac
