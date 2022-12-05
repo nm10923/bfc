@@ -38,7 +38,7 @@ The debugger mode is a wrapper to the interpreter mode that contains a terminal 
 **bfc -s 300 -t 20 -f helloworld.bf**\
     interprets the file "helloworld.bf" with the virtual heap size being 300*sizeof(unsigned char) bytes and the virtual stack size being 20*sizeof(int) bytes
 # EXIT VALUES
-0 if the program ran succesfully with no errors.
+0 if the program ran succesfully with no errors.\
 1 if the program failed. The specific error that occured will be printed out into stderr, in the form of "[COMPONENT] ERROR\_MESSAGE" (i.e. "[LEXER] Illegal move instruction")
 # BUGS
 This program is still in ultra-ultra alpha and probably won't compile, so yeah there are quite a few bugs.
