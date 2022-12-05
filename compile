@@ -1,6 +1,6 @@
 #!/bin/sh
-SRC="src" # source directory
-BUILD="build" # build directory
+SRC="src" # source dir
+BUILD="build" # build dir
 INSTALL="/usr/local/bin" # install dir
 CFLAGS="-g" # c flags
 LDFLAGS="-o $BUILD/bfc" # ld flags
@@ -10,6 +10,8 @@ CFILES=("main.c"
 	"parser.c" 
 	"interpreter.c" 
 	"global.c") # c files
+ERROR_FILE="./.compiler.out" # file for compiler output
+COMPILE_TOKEN="[$0] " # token that gets appeneded to the beginning of compiler output
 
 compile() {
   ls $BUILD &>/dev/null || mkdir $BUILD
@@ -17,11 +19,11 @@ compile() {
   for CFILE in $CFILES
     GCCFILES+="$SRC/$CFILE "
   done
-  gcc $CFLAGS $GCCFILES $LDFLAGS
+  gcc $CFLAGS $GCCFILES $LDFLAGS 2&>1 | awk '{"$COMPILE_TOKEN"print $1}' | tee $ERRORFILE
 }
 install() {
   [ -f "$0" ] && INSTALL=$0
-  ls build/bfc || echo "[compile] No binary of bfc found in $BUILD directory" 
+  ls build/bfc || echo "[compile] No binary of bfc found in $BUILD directory" && exit 1 
   install build/bfc $INSTALL_DIR
 }
 case $1 in
