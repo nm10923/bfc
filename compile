@@ -1,22 +1,32 @@
 #!/bin/sh
-CFILES="main.c\ 
-	compiler.c\ 
-	lexer.c\ 
-	parser.c\ 
-	interpreter.c\ 
-	global.c"
+SRC="src" # source directory
+BUILD="build" # build directory
+INSTALL="/usr/local/bin" # install dir
+CFLAGS="-g" # c flags
+LDFLAGS="-o $BUILD/bfc" # ld flags
+CFILES=("main.c" 
+	"compiler.c" 
+	"lexer.c" 
+	"parser.c" 
+	"interpreter.c" 
+	"global.c") # c files
+
 compile() {
-  ls build &>/dev/null || mkdir build
-  gcc -g $CFILES -o build/bfc
+  ls $BUILD &>/dev/null || mkdir $BUILD
+  GCCFILES=""
+  for CFILE in $CFILES
+    GCCFILES+="$SRC/$CFILE "
+  done
+  gcc $CFLAGS $GCCFILES $LDFLAGS
 }
 install() {
-  INSTALL_DIR="/usr/local/bin"
-  [ -z $0 ] && INSTALL_DIR=$0
-  ls build/bfc || install build/bfc $INSTALL_DIR
+  [ -f "$0" ] && INSTALL=$0
+  ls build/bfc || echo "[compile] No binary of bfc found in $BUILD directory" 
+  install build/bfc $INSTALL_DIR
 }
 case $1 in
   "install" | "i" )
-     install $2 ;;
+     install $1 ;;
   "compile" | "c" | *)
      compile ;;  
 esac
